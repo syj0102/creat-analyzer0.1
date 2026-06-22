@@ -8,6 +8,7 @@ const {
   resolvePlatform,
   buildMediaCrawlerArgs,
   buildStableDouyinArgs,
+  buildStableBilibiliArgs,
 } = require("./platform-support");
 
 const rootDir = __dirname;
@@ -23,6 +24,7 @@ function parseArgs(argv) {
     loginType: "qrcode",
     dryRun: false,
     useMediaCrawlerForDouyin: false,
+    useMediaCrawlerForBilibili: false,
   };
 
   if (args[0] && !args[0].startsWith("--")) result.platform = args.shift();
@@ -45,6 +47,8 @@ function parseArgs(argv) {
       result.dryRun = true;
     } else if (key === "--douyin-mediacrawler") {
       result.useMediaCrawlerForDouyin = true;
+    } else if (key === "--bili-mediacrawler") {
+      result.useMediaCrawlerForBilibili = true;
     } else {
       throw new Error(`未知参数：${key}`);
     }
@@ -123,6 +127,19 @@ async function main() {
       cwd: rootDir,
       env: process.env,
       mode: "stable-douyin",
+    };
+  } else if (platform === "bilibili" && !opts.useMediaCrawlerForBilibili) {
+    runner = {
+      file: "node",
+      args: buildStableBilibiliArgs({
+        rootDir,
+        target: opts.target,
+        maxNotes: opts.maxNotes,
+        outputDir: opts.outputDir,
+      }),
+      cwd: rootDir,
+      env: process.env,
+      mode: "stable-bilibili",
     };
   } else {
     runner = {

@@ -6,6 +6,7 @@ const {
   resolvePlatform,
   buildMediaCrawlerArgs,
   buildStableDouyinArgs,
+  buildStableBilibiliArgs,
 } = require("./platform-support");
 
 assert.strictEqual(normalizePlatform("dy"), "douyin");
@@ -44,5 +45,15 @@ const dyArgs = buildStableDouyinArgs({
 assert.strictEqual(dyArgs[0], path.join("D:\\creator-analyzer", "scrape-dy-creator-cdp.js"));
 assert.strictEqual(dyArgs[1], "MS4wLjABAAAAxxx");
 assert.strictEqual(dyArgs[2], "8");
+
+const biliArgs = buildStableBilibiliArgs({
+  rootDir: "D:\\creator-analyzer",
+  target: "https://space.bilibili.com/123",
+  maxNotes: 9,
+  outputDir: "D:\\out",
+});
+assert.strictEqual(biliArgs[0], path.join("D:\\creator-analyzer", "scrape-bili-creator-cdp.js"));
+assert.strictEqual(biliArgs[1], "https://space.bilibili.com/123");
+assert.strictEqual(biliArgs[2], "9");
 
 console.log("platform support tests passed");

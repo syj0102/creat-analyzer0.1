@@ -25,6 +25,7 @@ const SUPPORTED_PLATFORMS = {
     label: "B站",
     mediaCrawlerPlatform: "bili",
     domains: ["bilibili.com", "b23.tv"],
+    stableScript: "scrape-bili-creator-cdp.js",
   },
   weibo: {
     aliases: ["wb", "weibo", "微博"],
@@ -128,6 +129,16 @@ function buildStableDouyinArgs({ rootDir, target, maxNotes, outputDir }) {
   ];
 }
 
+function buildStableBilibiliArgs({ rootDir, target, maxNotes, outputDir }) {
+  return [
+    path.join(rootDir, SUPPORTED_PLATFORMS.bilibili.stableScript),
+    target,
+    String(maxNotes),
+    "--output-dir",
+    outputDir,
+  ];
+}
+
 module.exports = {
   SUPPORTED_PLATFORMS,
   normalizePlatform,
@@ -135,4 +146,5 @@ module.exports = {
   resolvePlatform,
   buildMediaCrawlerArgs,
   buildStableDouyinArgs,
+  buildStableBilibiliArgs,
 };
