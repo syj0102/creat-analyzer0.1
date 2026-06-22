@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.venv*/
+__pycache__/
+*.pyc
+
+# Runtime output and local data
+output/
+data/
+audio/
+models/
+transcripts/
+*.csv
+*.json
+!package.json
+!package-lock.json
+*.mp4
+*.m4a
+*.wav
+*.webm
+
+# Browser profiles and caches
+*-profile/
+.cache/
+cache/
+tmp/
+temp/
+
+# Secrets and local config
+.env
+.env.*
+*.key
+*.pem
+*.token
+
+# Logs and local databases
+*.log
+*.sqlite
+*.sqlite-*
+*.db
+
+# Large local installers / archives
+ffmpeg.zip
+*.zip
+*.7z
+*.rar
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
