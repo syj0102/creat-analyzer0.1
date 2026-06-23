@@ -1,6 +1,21 @@
 {
+  "name": "creator-analyzer",
+  "version": "0.3.0",
+  "description": "本地运行的创作者作品采集与内容分析工具",
+  "main": "scrape-creator-multi.js",
+  "private": true,
+  "scripts": {
+    "start": "node scrape-creator-multi.js",
+    "dy": "node scrape-dy-creator-cdp.js",
+    "bili": "node scrape-bili-creator-cdp.js",
+    "dry-run": "node scrape-creator-multi.js auto https://space.bilibili.com/1375678265 5 --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "ffmpeg-static": "^5.3.0",
-    "playwright": "^1.61.0"
+    "playwright": "^1.61.0",
+    "ws": "^8.18.0"
   }
 }
