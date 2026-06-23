@@ -12,6 +12,17 @@
 
 > 本项目仅建议用于个人学习、竞品研究和合规的数据分析。请遵守平台规则、版权要求和相关法律法规，不要采集或传播敏感、非公开或未经授权的数据。
 
+## v0.3.0 更新
+
+这次主要不是加功能，而是整理地基。
+
+- 抽出公共 CDP 连接模块：`lib/cdp-client.js`
+- 抽出公共 CSV 输出模块：`lib/csv.js`
+- 抽出公共命令行辅助模块：`lib/cli.js`
+- 修复 Node 18 环境下 `WebSocket is not defined` 的隐患，改为使用 `ws` 依赖
+- 重写 `package.json`，补充项目名、版本、入口和常用 npm scripts
+- 抖音与 B站采集器继续保留原入口，避免影响原使用习惯
+
 ## v0.2.0 更新
 
 - 新增 B站 UP 主作品采集：`scrape-bili-creator-cdp.js`
@@ -22,15 +33,22 @@
 
 ## 文件说明
 
-- `抖音博主采集器.cmd`：双击启动抖音图形界面
-- `douyin-crawler-gui.ps1`：抖音图形界面
-- `scrape-dy-creator-cdp.js`：抖音作品采集脚本
-- `scrape-bili-creator-cdp.js`：B站 UP 主作品采集脚本
-- `scrape-creator-multi.js`：多平台实验入口
-- `transcribe-dy-videos.py`：抖音视频口播转写脚本
-- `analyze.js`：数据分析脚本
-- `MULTI_PLATFORM_EXPERIMENT.md`：多平台实验说明
-- `DISCLAIMER.md`：免责声明
+```text
+creator-analyzer/
+├─ lib/
+│  ├─ cdp-client.js        # Chrome CDP 连接与浏览器内 fetch
+│  ├─ csv.js               # CSV 转义与写入
+│  └─ cli.js               # 命令行参数与安全文件名
+├─ scrape-dy-creator-cdp.js      # 抖音作品采集脚本
+├─ scrape-bili-creator-cdp.js    # B站 UP 主作品采集脚本
+├─ scrape-creator-multi.js       # 多平台实验入口
+├─ transcribe-dy-videos.py       # 抖音视频口播转写脚本
+├─ analyze.js                    # 数据分析脚本
+├─ douyin-crawler-gui.ps1        # 抖音图形界面
+├─ 抖音博主采集器.cmd             # 双击启动抖音图形界面
+├─ MULTI_PLATFORM_EXPERIMENT.md  # 多平台实验说明
+└─ DISCLAIMER.md                 # 免责声明
+```
 
 ## 安装
 
@@ -47,12 +65,47 @@ cd D:\creator-analyzer
 npm install
 ```
 
+如果从旧版本升级到 v0.3.0，建议重新执行一次：
+
+```powershell
+cd D:\creator-analyzer
+npm install
+```
+
+原因是 v0.3.0 新增了 `ws` 依赖，用来稳定连接 Chrome CDP。
+
 如果需要抖音口播转写：
 
 ```powershell
 cd D:\creator-analyzer
 python -m venv .venv-transcribe
 .\.venv-transcribe\Scripts\python.exe -m pip install -U pip faster-whisper
+```
+
+## 常用命令
+
+查看多平台入口是否能正常解析参数：
+
+```powershell
+npm run dry-run
+```
+
+抖音采集：
+
+```powershell
+npm run dy -- "抖音主页链接或sec_uid" 20 --output-dir D:\creator-analyzer\output
+```
+
+B站采集：
+
+```powershell
+npm run bili -- "https://space.bilibili.com/1375678265" 20 --output-dir D:\creator-analyzer\output\multi-test
+```
+
+也可以继续使用原来的直接调用方式：
+
+```powershell
+node scrape-creator-multi.js auto "主页链接或ID" 20 --output-dir D:\creator-analyzer\output\multi-test
 ```
 
 ## 抖音采集
@@ -84,7 +137,6 @@ B站脚本需要复用一个已登录的 9222 调试浏览器。
 在打开的浏览器里登录 B站后，运行：
 
 ```powershell
-cd D:\creator-analyzer
 node scrape-creator-multi.js auto "https://space.bilibili.com/1375678265" 20 --output-dir D:\creator-analyzer\output\multi-test
 ```
 
@@ -121,6 +173,12 @@ node scrape-creator-multi.js auto "主页链接或ID" 20 --output-dir D:\creator
 - 抖音：稳定
 - B站：稳定，已真实测试
 - 小红书、快手、微博、贴吧、知乎：实验路由，依赖 `D:\MediaCrawler`，尚未逐个平台验证
+
+如果你的 `MediaCrawler` 不在 `D:\MediaCrawler`，可以这样指定：
+
+```powershell
+node scrape-creator-multi.js xhs "主页链接或ID" 20 --media-crawler-dir D:\你的MediaCrawler目录
+```
 
 ## GitHub 上传前检查
 
