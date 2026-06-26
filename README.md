@@ -1,35 +1,80 @@
-# Creator Analyzer
+# 创作者选题雷达
 
-本地运行的创作者作品采集与内容分析工具。
+这个项目不是单纯的采集器。
+
+它的目标是帮创作者回答一个更值钱的问题：
+
+> 我明天到底写什么、拍什么、怎么开头？
+
+第一阶段先把公开账号内容整理成表格；第二阶段找出数据好的内容；第三阶段生成能直接用的选题、标题和账号拆解报告。
+
+## 现在能做什么
 
 当前稳定能力：
 
-- 抖音博主作品采集
+- 抖音博主作品整理
 - 抖音视频口播转文字
-- B站 UP 主作品采集
+- B站 UP 主作品整理
 - CSV 输出
 - 后续可接 GPT 做选题、话术和运营分析
 
-> 本项目仅建议用于个人学习、竞品研究和合规的数据分析。请遵守平台规则、版权要求和相关法律法规，不要采集或传播敏感、非公开或未经授权的数据。
+当前实验能力：
 
-## v0.3.0 更新
+- 小红书、快手、微博、贴吧、知乎保留实验路由
+- 小红书优先验证
+- 未跑通前，不标记为稳定能力
 
-这次主要不是加功能，而是整理地基。
+> 本项目仅建议用于个人学习、公开内容研究和合规的数据分析。请遵守平台规则、版权要求和相关法律法规，不要处理敏感、非公开或未经授权的数据。
 
-- 抽出公共 CDP 连接模块：`lib/cdp-client.js`
-- 抽出公共 CSV 输出模块：`lib/csv.js`
-- 抽出公共命令行辅助模块：`lib/cli.js`
-- 修复 Node 18 环境下 `WebSocket is not defined` 的隐患，改为使用 `ws` 依赖
-- 重写 `package.json`，补充项目名、版本、入口和常用 npm scripts
-- 抖音与 B站采集器继续保留原入口，避免影响原使用习惯
+## 一句话定位
 
-## v0.2.0 更新
+给创作者看的选题工具。
 
-- 新增 B站 UP 主作品采集：`scrape-bili-creator-cdp.js`
-- 新增多平台实验入口：`scrape-creator-multi.js`
-- 抖音仍默认使用原来已跑通的稳定采集器
-- B站已用真实主页测试通过
-- 小红书、快手、微博、贴吧、知乎目前只保留实验路由，未标记为稳定能力
+不是告诉你“这个账号有多少数据”，而是帮你看懂：
+
+- 哪些内容火了
+- 为什么火
+- 评论区在要什么
+- 普通创作者能不能学
+- 明天可以发什么
+
+## 适合谁
+
+适合这些人：
+
+- 写公众号的人
+- 做短视频的人
+- 做小红书的人
+- 想拆对标账号的人
+- 不知道每天发什么的人
+- 想把爆款内容拆成人话的人
+
+不适合这些人：
+
+- 想批量搬运别人内容的人
+- 想绕平台规则的人
+- 想采集非公开数据的人
+- 只想看热闹、不想做内容的人
+
+## 最小赚钱方式
+
+先不要卖软件。
+
+先卖一份简单服务：
+
+> 我帮你拆一个对标账号，找出 10 个可写选题。
+
+可以从三个档开始：
+
+- 体验版：拆 1 个账号，给 10 个选题
+- 标准版：拆 3 个账号，给选题、标题、开头方向
+- 深度版：做 1 份账号拆解报告和 30 天选题表
+
+真正能卖钱的不是“能采集”。
+
+真正能卖钱的是：
+
+> 帮别人省掉不知道写什么的痛苦。
 
 ## 文件说明
 
@@ -39,14 +84,15 @@ creator-analyzer/
 │  ├─ cdp-client.js        # Chrome CDP 连接与浏览器内 fetch
 │  ├─ csv.js               # CSV 转义与写入
 │  └─ cli.js               # 命令行参数与安全文件名
-├─ scrape-dy-creator-cdp.js      # 抖音作品采集脚本
-├─ scrape-bili-creator-cdp.js    # B站 UP 主作品采集脚本
+├─ scrape-dy-creator-cdp.js      # 抖音作品整理脚本
+├─ scrape-bili-creator-cdp.js    # B站 UP 主作品整理脚本
 ├─ scrape-creator-multi.js       # 多平台实验入口
 ├─ transcribe-dy-videos.py       # 抖音视频口播转写脚本
 ├─ analyze.js                    # 数据分析脚本
 ├─ douyin-crawler-gui.ps1        # 抖音图形界面
 ├─ 抖音博主采集器.cmd             # 双击启动抖音图形界面
 ├─ MULTI_PLATFORM_EXPERIMENT.md  # 多平台实验说明
+├─ ROADMAP.md                    # 产品路线图
 └─ DISCLAIMER.md                 # 免责声明
 ```
 
@@ -65,15 +111,6 @@ cd D:\creator-analyzer
 npm install
 ```
 
-如果从旧版本升级到 v0.3.0，建议重新执行一次：
-
-```powershell
-cd D:\creator-analyzer
-npm install
-```
-
-原因是 v0.3.0 新增了 `ws` 依赖，用来稳定连接 Chrome CDP。
-
 如果需要抖音口播转写：
 
 ```powershell
@@ -90,95 +127,41 @@ python -m venv .venv-transcribe
 npm run dry-run
 ```
 
-抖音采集：
+抖音：
 
 ```powershell
 npm run dy -- "抖音主页链接或sec_uid" 20 --output-dir D:\creator-analyzer\output
 ```
 
-B站采集：
+B站：
 
 ```powershell
-npm run bili -- "https://space.bilibili.com/1375678265" 20 --output-dir D:\creator-analyzer\output\multi-test
+npm run bili -- "B站主页链接" 20 --output-dir D:\creator-analyzer\output\multi-test
 ```
 
-也可以继续使用原来的直接调用方式：
-
-```powershell
-node scrape-creator-multi.js auto "主页链接或ID" 20 --output-dir D:\creator-analyzer\output\multi-test
-```
-
-## 抖音采集
-
-1. 双击 `D:\creator-analyzer\抖音博主采集器.cmd`
-2. 输入抖音分享短链、主页链接或 `sec_uid`
-3. 选择输出目录
-4. 首次使用先点“打开/登录浏览器”
-5. 在浏览器中登录抖音并完成验证码
-6. 回到工具点击“开始抓取”
-7. 如需口播文字，勾选“抓取后转写口播”
-
-默认输出目录：
-
-```text
-D:\creator-analyzer\output
-```
-
-## B站采集
-
-B站脚本需要复用一个已登录的 9222 调试浏览器。
-
-启动浏览器：
-
-```powershell
-& "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir=D:\UserCaches\bilibili-cdp-profile https://www.bilibili.com
-```
-
-在打开的浏览器里登录 B站后，运行：
-
-```powershell
-node scrape-creator-multi.js auto "https://space.bilibili.com/1375678265" 20 --output-dir D:\creator-analyzer\output\multi-test
-```
-
-也可以直接调用 B站脚本：
-
-```powershell
-node scrape-bili-creator-cdp.js "https://space.bilibili.com/1375678265" 20 --output-dir D:\creator-analyzer\output\multi-test
-```
-
-B站 CSV 字段包括：
-
-- 标题
-- 封面
-- 播放
-- 点赞
-- 投币
-- 收藏
-- 评论
-- 分享
-- 弹幕
-- 发布时间
-- 视频链接
-
-## 多平台实验入口
-
-实验入口会自动识别平台：
+多平台实验入口：
 
 ```powershell
 node scrape-creator-multi.js auto "主页链接或ID" 20 --output-dir D:\creator-analyzer\output\multi-test
 ```
 
-当前状态：
+## 当前阶段
 
-- 抖音：稳定
-- B站：稳定，已真实测试
-- 小红书、快手、微博、贴吧、知乎：实验路由，依赖 `D:\MediaCrawler`，尚未逐个平台验证
+现在项目还在“工具地基”阶段。
 
-如果你的 `MediaCrawler` 不在 `D:\MediaCrawler`，可以这样指定：
+下一步重点不是继续堆平台，而是做三件事：
 
-```powershell
-node scrape-creator-multi.js xhs "主页链接或ID" 20 --media-crawler-dir D:\你的MediaCrawler目录
-```
+1. 把小红书公开账号流程跑通
+2. 把不同平台 CSV 整理成统一字段
+3. 输出一份普通人能看懂的账号拆解报告
+
+## 后续产品形态
+
+最终希望输出三类东西：
+
+- 爆款内容表：哪些内容值得学
+- 评论需求表：用户到底想要什么
+- 选题建议表：明天可以写什么
 
 ## GitHub 上传前检查
 
