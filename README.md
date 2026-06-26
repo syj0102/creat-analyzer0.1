@@ -16,6 +16,7 @@
 - 抖音视频口播转文字
 - B站 UP 主作品整理
 - CSV 输出
+- CSV 字段统一
 - 后续可接 GPT 做选题、话术和运营分析
 
 当前实验能力：
@@ -82,8 +83,10 @@
 creator-analyzer/
 ├─ lib/
 │  ├─ cdp-client.js        # Chrome CDP 连接与浏览器内 fetch
-│  ├─ csv.js               # CSV 转义与写入
+│  ├─ csv.js               # CSV 读取、转义与写入
+│  ├─ normalize-csv.js     # 把不同平台字段统一成一套标准字段
 │  └─ cli.js               # 命令行参数与安全文件名
+├─ normalize-csv.js              # CSV 字段统一命令入口
 ├─ scrape-dy-creator-cdp.js      # 抖音作品整理脚本
 ├─ scrape-bili-creator-cdp.js    # B站 UP 主作品整理脚本
 ├─ scrape-creator-multi.js       # 多平台实验入口
@@ -143,6 +146,24 @@ npm run bili -- "B站主页链接" 20 --output-dir D:\creator-analyzer\output\mu
 
 ```powershell
 node scrape-creator-multi.js auto "主页链接或ID" 20 --output-dir D:\creator-analyzer\output\multi-test
+```
+
+统一 CSV 字段：
+
+```powershell
+npm run normalize -- D:\creator-analyzer\output\raw.csv D:\creator-analyzer\output\normalized.csv
+```
+
+如果不写输出文件，会自动生成：
+
+```text
+原文件名.normalized.csv
+```
+
+标准字段包括：
+
+```text
+platform, title, publish_time, likes, comments, collects, shares, url, cover, desc, transcript, views, raw_index, source_file
 ```
 
 ## 当前阶段

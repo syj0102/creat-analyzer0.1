@@ -1,6 +1,6 @@
 {
   "name": "creator-analyzer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "本地运行的创作者作品采集与内容分析工具",
   "main": "scrape-creator-multi.js",
   "private": true,
@@ -8,6 +8,8 @@
     "start": "node scrape-creator-multi.js",
     "dy": "node scrape-dy-creator-cdp.js",
     "bili": "node scrape-bili-creator-cdp.js",
+    "normalize": "node normalize-csv.js",
+    "test": "node test-csv-normalizer.js && node test-platform-support.js",
     "dry-run": "node scrape-creator-multi.js auto https://space.bilibili.com/1375678265 5 --dry-run"
   },
   "engines": {
