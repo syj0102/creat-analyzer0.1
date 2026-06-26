@@ -8,9 +8,11 @@
     "start": "node scrape-creator-multi.js",
     "dy": "node scrape-dy-creator-cdp.js",
     "bili": "node scrape-bili-creator-cdp.js",
+    "xhs": "node scrape-xhs-creator.js",
     "normalize": "node normalize-csv.js",
     "test": "node test-csv-normalizer.js && node test-platform-support.js",
-    "dry-run": "node scrape-creator-multi.js auto https://space.bilibili.com/1375678265 5 --dry-run"
+    "dry-run": "node scrape-creator-multi.js bili demo-bili-user 5 --dry-run",
+    "dry-run:xhs": "node scrape-xhs-creator.js demo-xhs-user 5 --dry-run"
   },
   "engines": {
     "node": ">=18"
